@@ -284,6 +284,14 @@ Now we want to save the image to the pictures library.
 2. Select the "Browse" tab, and in the search box type: "WriteableBitmapEx"
 3. Select the package and install it.
 
+Add the following using statements:
+
+```c#
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.Storage.FileProperties;
+```
+
 Now add the following method:
 
 ```c#
