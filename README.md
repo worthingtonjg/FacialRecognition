@@ -484,7 +484,13 @@ Make sure to call this method in FaceDetectionEffect_FaceDetected as follows ...
     
 ```
 
-At the bottom of the FaceDetectionEffect_FaceDetected, un-comment the two lines of code and change them as follows ...
+Add a using for ...
+
+```c#
+using Newtonsoft.Json;
+```
+
+Then at the bottom of the FaceDetectionEffect_FaceDetected, un-comment the two lines of code and change them as follows ...
 
 ```c#
 		string json = JsonConvert.SerializeObject(faces, Formatting.Indented);
