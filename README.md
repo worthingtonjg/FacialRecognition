@@ -124,9 +124,16 @@ You should get prompted for permission to use the microphone and web camera.  If
 >
 >[View UWP Camera Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/camera)
 
-### Step 3: Add local face detection
+### Step 4: Add local face detection
 
 We want to be able to detect faces locally.  This will allow us to call the cognitive services less frequently (only when faces are in the frame).  To do this we can use the built in face detection capability of Windows 10 by adding a Face Detection Effect.  
+
+- Add a two new using statements:
+
+```c#
+using Windows.Media.Core;
+using System.Threading.Tasks;
+```
 
 - Add a new variable at the top of the code:
 
@@ -135,11 +142,6 @@ private FaceDetectionEffect _faceDetectionEffect;
 ```
 
 - Add the following method to your code:
-
-> - **CreateFaceDetectionEffectAsync** - This method leverages the built in capabilities of Windows 10 to detect faces in images.
-> 	- **_faceDetectionEffect.DesiredDetectionInterval** - this is how frequently it will check for faces
-> 	- **_faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;** - This method gets called when a face is detected.
-
 
 ```c#
 	private async Task CreateFaceDetectionEffectAsync()
@@ -167,6 +169,12 @@ private FaceDetectionEffect _faceDetectionEffect;
         }
 ```
 
+>  This method leverages the built in capabilities of Windows 10 to detect faces in images.
+> 	- **_faceDetectionEffect.DesiredDetectionInterval** - this is how frequently it will check for faces
+> 	- **_faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;** - This method gets called when a face is detected.
+
+
+
 - Then make sure you call *CreateFaceDetectionEffectAsync* at the bottom of your OnNavigatedTo method:
 
 ```c#
@@ -179,10 +187,6 @@ private FaceDetectionEffect _faceDetectionEffect;
 ```
 
 - Next we need to define *FaceDetectionEffect_FaceDetected*, as mentioned above this method gets called when faces are detected.
-
-> This code executes on a seperate thread.  So we need to use the Dispatcher to marshall our code to run on the UI thread, otherwise we will get errors.
-
-> Also notice we use "-=" and "+=" to remove the event listener temporarily (until we are done), so that the event doesn't fire again until the frame has been analyzed,
 
 ```c#
 	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
@@ -209,7 +213,9 @@ private FaceDetectionEffect _faceDetectionEffect;
             });
         }
 ```
+> This code executes on a seperate thread.  So we need to use the Dispatcher to marshall our code to run on the UI thread, otherwise we will get errors.
 
+> Also notice we use "-=" and "+=" to remove the event listener temporarily (until we are done), so that the event doesn't fire again until the frame has been analyzed,
 
 
 	
