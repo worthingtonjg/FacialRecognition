@@ -428,7 +428,8 @@ Add the following code that will initialize your face group if it does not exist
 
 Then in your OnNavigatedTo, make sure you call this new method:
 
-protected async override void OnNavigatedTo(NavigationEventArgs e)
+```c#
+	protected async override void OnNavigatedTo(NavigationEventArgs e)
 	{
 		            _faceClient = new FaceClient(new ApiKeyServiceClientCredentials(_subscriptionKey), new DelegatingHandler[] { })
             {
@@ -438,3 +439,4 @@ protected async override void OnNavigatedTo(NavigationEventArgs e)
 	    await InitFaceGroup();
 	    
 	    ... other code ...
+```
