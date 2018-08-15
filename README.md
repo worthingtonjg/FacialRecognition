@@ -440,3 +440,46 @@ Then in your OnNavigatedTo, make sure you call this new method:
 	    
 	    ... other code ...
 ```
+
+### Step 9: Call Detect Faces Cognitive Service
+
+The next step is to pass the image to the Azure Cognitive service, so it can detect the faces in the image.  This method will call the service and return a list of DetectedFace's
+
+Add this code:
+
+```c#
+	public async Task<IList<DetectedFace>> FindFaces(StorageFile file)
+        {
+            IList<DetectedFace> result = new List<DetectedFace>();
+
+            using (var stream = await file.OpenStreamForReadAsync())
+            {
+                result = await _faceClient.Face.DetectWithStreamAsync(stream, true, false, new FaceAttributeType[]
+                {
+                    FaceAttributeType.Gender,
+                    FaceAttributeType.Age,
+                    FaceAttributeType.Smile,
+                    FaceAttributeType.Emotion,
+                    FaceAttributeType.Glasses,
+                    FaceAttributeType.Hair,
+                               });
+            }
+
+            return result;
+        }
+```
+
+Make sure to call this method in FaceDetectionEffect_FaceDetected as follows ...
+
+```c#
+private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+            ...other code...
+	    
+                    // Do stuff here
+                    WriteableBitmap bmp = await GetWriteableBitmapFromPreviewFrame();
+                    var file = await SaveBitmapToStorage(bmp);
+		    var faces = await FindFaces(file);
+
+    
+```
