@@ -223,9 +223,20 @@ private FaceDetectionEffect _faceDetectionEffect;
 
 Run the application.  You should still get the same video preview, but if you watch the debug window, it should list how many faces are detected in the image.
 
-###Step 5: Capture Frame 
+### Step 5: Capture Frame 
 
-The next step is to capture the frame as an image when a face is detected.  Add the following method...
+The next step is to capture the frame as an image when a face is detected.  
+
+Add the following using statements:
+
+```c#
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.Media;
+using Windows.Graphics.Imaging;
+using Windows.Media.MediaProperties;
+```
+
+Then add the following method...
 
 ```c#
 private async Task<WriteableBitmap> GetWriteableBitmapFromPreviewFrame()
