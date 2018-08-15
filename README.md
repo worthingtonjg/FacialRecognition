@@ -274,7 +274,7 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new GetWriteabl
 	}
 ```
 
-###Step 6: Save image to Pictures Library
+### Step 6: Save image to Pictures Library
 
 Now we want to save the image to the pictures library.  
 
@@ -333,7 +333,7 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new method:
 			... other code ...
 			// Do stuff here
 			var bmp = await GetWriteableBitmapFromPreviewFrame();
-			var file =  = await SaveBitmapToStorage(bmp);		
+			var file = await SaveBitmapToStorage(bmp);		
 	}
 ```
 
@@ -341,8 +341,100 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new method:
 
 Open you Pictures folder and run the application.  If you did everything correctly, you should see a new image named "_photo.jpg" show up every time a frame is captured that has a face.  
 
-###Step 7: Add Cognitive Services
+### Step 7: Add Cognitive Services
 
+To continue, you will need to make sure you already have an Azure account setup.  You will also need to have already created a Face Cognitive Service in your account.  
 
-	
-  
+I am not going to go into details here about how to do that.  It is actually really easy to do in Azure.
+
+Once your cognitive service is setup, we need to pull in the correct nuget package:
+
+1. Right-click on your project and select "Manage NuGet Packages"
+2. Select the "Browse" tab
+3. This time, make sure "Include Prerelease" is checked
+4. In the search box type: "Microsoft.Azure.CognitiveServices.Vision.Face"
+5. Install the "2.0.0-preview" version (if you install a newer version then there could be breaking changes in the API)
+3. Select the package and install it.
+
+Add the following usings:
+
+```c#
+using Microsoft.Azure.CognitiveServices.Vision.Face;
+using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+using System.Net.Http;
+```
+
+Next add the following variables at the top of the main page
+
+```c#
+	private IFaceClient _faceClient;
+        private string _subscriptionKey = "<insert>";
+        private string _apiRoot = "https://westus.api.cognitive.microsoft.com/face/v1.0";
+        private string _personGroupId = "myfriends";
+```
+
+**_subscriptionKey**
+
+In your azure portal, open your Face Cognitive Service.  Under Resource Management => Keys, copy one of your keys.
+
+**_apiRoot**
+
+You can actually leave the end point as is: https://westus.api.cognitive.microsoft.com/face/v1.0
+
+**_personGroupId**
+
+Faces are categorized and stored in person groups.  If you already have a person group, then put the id for your group here.  Otherwise set this to whatever makes sense to you.  You can leave it as "myfriends" if you want to.
+
+Next at the top of your OnNavigatedTo method add:
+
+```c#
+	protected async override void OnNavigatedTo(NavigationEventArgs e)
+	{
+		            _faceClient = new FaceClient(new ApiKeyServiceClientCredentials(_subscriptionKey), new DelegatingHandler[] { })
+            {
+                BaseUri = new Uri(_apiRoot)
+            };
+	    
+	    ... other code ...
+```  
+All the cognitive services are just rest calls.  The FaceClient wraps those rest calls for us, and gives an API to code against.  You don't have to use the FaceClient, you could call the rest api end points directly, but it makes it easier and faster to get started if you do.
+
+### Step 8: Initialize your face group
+
+Before you can't start recognizing faces, you need a face group. 
+
+Add the following code that will initialize your face group if it does not exist...
+
+```c#
+	private async Task InitFaceGroup()
+        {
+            try
+            {
+                PersonGroup group = await _faceClient.PersonGroup.GetAsync(_personGroupId);
+            }
+            catch (APIErrorException ex)
+            {
+                if (ex.Body.Error.Code == "PersonGroupNotFound")
+                {
+                    await _faceClient.PersonGroup.CreateAsync(_personGroupId, _personGroupId);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+```
+
+Then in your OnNavigatedTo, make sure you call this new method:
+
+protected async override void OnNavigatedTo(NavigationEventArgs e)
+	{
+		            _faceClient = new FaceClient(new ApiKeyServiceClientCredentials(_subscriptionKey), new DelegatingHandler[] { })
+            {
+                BaseUri = new Uri(_apiRoot)
+            };
+	    
+	    await InitFaceGroup();
+	    
+	    ... other code ...
