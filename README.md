@@ -34,7 +34,7 @@ You can actually leave the end point as is: https://westus.api.cognitive.microso
 
 Faces are categorized and stored in person groups.  If you already have a person group, then put the id for your group here.  Otherwise set this to whatever makes sense to you.  You can leave it as "myfriends" if you want to.
 
-** Run the app **
+**Run the app**
 
 Now run the app on the "Local Machine".  It should run, and display a video preview.  Once things initialize, each second the video preview is analyzed and sent to the cognitive services.  The results are displayed in the text box.
 
@@ -86,9 +86,9 @@ To use the web camera, we also have to enable the microphone.
 - Open *MainPage.xaml.cs*, and add an override for *OnNavigatedTo*, and make it async.  We need setup some async code when the app launches, and we can't do async in the constructor.
 
 ```c#
-		protected async override void OnNavigatedTo(NavigationEventArgs e)
-    {
-		}
+	protected async override void OnNavigatedTo(NavigationEventArgs e)
+	{
+	}
 ```
 
 - Add the following private variable at the top of the code:
@@ -107,9 +107,13 @@ private MediaCapture _mediaCapture;
 		await _mediaCapture.StartPreviewAsync();
 ```
 
-The *MediaCapture* class allows us to connect to the attached Web Camera.  The *PreviewElement.Source* is set to point at _mediaCapture, allowing us to preview the video on our screen.
+The *MediaCapture* class allows us to connect to the attached Web Camera.  
 
-- Run the application.  You should get prompted for permission to use the microphone and web camera.  If you say yes, to both you should see a video preview from the camera on your screen.
+The *PreviewElement.Source* is set to point at _mediaCapture, allowing us to preview the video on our screen.
+
+**Run the application**  
+
+You should get prompted for permission to use the microphone and web camera.  If you say yes, to both you should see a video preview from the camera on your screen.
 
 > **Note:** On my Surface Book 2 the *MediaCapture* class defaults to the front facing camera.  It is possible you have a different camera setup, so you may need to look into the documentation for more information about setting which camera to use.
 >
