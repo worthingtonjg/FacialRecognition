@@ -60,7 +60,7 @@ Below is a step by step tutorial / explanation of the code, and how it works.  T
   - Target Version: Windows 10 Fall Creators Update (10.0; Build 16299)
   - Minimum Version: Windows 10 November Update (10.0; Build 10586)
 
-### Step 2:
+### Step 2: Add Capabilities
 - Edit the Package.appxmanifest and add the following capabilities:
 
 1. Microphone
@@ -90,8 +90,13 @@ To use the web camera, we also have to enable the microphone.
 	{
 	}
 ```
+- At the top, add the following using statement:
 
-- Add the following private variable at the top of the code:
+```c#
+using Windows.Media.Capture;
+```
+
+- Then add the following private variable at the top of the MainPage class:
 
 ```c#
 private MediaCapture _mediaCapture;
@@ -119,6 +124,94 @@ You should get prompted for permission to use the microphone and web camera.  If
 >
 >[View UWP Camera Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/camera)
 
+### Step 3: Add local face detection
+
+We want to be able to detect faces locally.  This will allow us to call the cognitive services less frequently (only when faces are in the frame).  To do this we can use the built in face detection capability of Windows 10 by adding a Face Detection Effect.  
+
+- Add a new variable at the top of the code:
+
+```c#
+private FaceDetectionEffect _faceDetectionEffect;
+```
+
+- Add the following method to your code:
+
+> - **CreateFaceDetectionEffectAsync** - This method leverages the built in capabilities of Windows 10 to detect faces in images.
+> 	- **_faceDetectionEffect.DesiredDetectionInterval** - this is how frequently it will check for faces
+> 	- **_faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;** - This method gets called when a face is detected.
 
 
+```c#
+	private async Task CreateFaceDetectionEffectAsync()
+        {
+            // Create the definition, which will contain some initialization settings
+            var definition = new FaceDetectionEffectDefinition();
+
+            // To ensure preview smoothness, do not delay incoming samples
+            definition.SynchronousDetectionEnabled = false;
+
+            // In this scenario, balance speed and accuracy
+            definition.DetectionMode = FaceDetectionMode.Balanced;
+
+            // Add the effect to the preview stream
+            _faceDetectionEffect = (FaceDetectionEffect)await _mediaCapture.AddVideoEffectAsync(definition, MediaStreamType.VideoPreview);
+
+            // Register for face detection events
+            _faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;
+
+            // Choose the shortest interval between detection events
+            _faceDetectionEffect.DesiredDetectionInterval = TimeSpan.FromMilliseconds(1000);
+
+            // Start detecting faces
+            _faceDetectionEffect.Enabled = true;
+        }
+```
+
+- Then make sure you call *CreateFaceDetectionEffectAsync* at the bottom of your OnNavigatedTo method:
+
+```c#
+	protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+		...other code ...
+		await CreateFaceDetectionEffectAsync();
+	}	
+	
+```
+
+- Next we need to define *FaceDetectionEffect_FaceDetected*, as mentioned above this method gets called when faces are detected.
+
+> This code executes on a seperate thread.  So we need to use the Dispatcher to marshall our code to run on the UI thread, otherwise we will get errors.
+
+> Also notice we use "-=" and "+=" to remove the event listener temporarily (until we are done), so that the event doesn't fire again until the frame has been analyzed,
+
+```c#
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+            Debug.WriteLine($"{args.ResultFrame.DetectedFaces.Count} faces detected");
+
+			if (args.ResultFrame.DetectedFaces.Count == 0) return;
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                try
+                {
+                    _faceDetectionEffect.FaceDetected -= FaceDetectionEffect_FaceDetected;
+
+					// Do stuff here
+					
+					//string json = JsonConvert.SerializeObject(candidates, Formatting.Indented);
+                    //ResultText.Text = json;
+                }
+                finally
+                {
+                    _faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;
+                }
+            });
+        }
+```
+
+
+
+	
+	
   
