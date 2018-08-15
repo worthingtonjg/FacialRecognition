@@ -472,7 +472,7 @@ Add this code:
 Make sure to call this method in FaceDetectionEffect_FaceDetected as follows ...
 
 ```c#
-private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
         {
             ...other code...
 	    
@@ -483,3 +483,16 @@ private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, 
 
     
 ```
+
+At the bottom of the FaceDetectionEffect_FaceDetected, un-comment the two lines of code and change them as follows ...
+
+```c#
+		string json = JsonConvert.SerializeObject(faces, Formatting.Indented);
+		ResultText.Text = json;
+```
+
+**Run the application**
+
+Run the application, you should now see data showing up in the text box about the faces found in the analyzed frame.
+
+
