@@ -501,4 +501,48 @@ Then at the bottom of the FaceDetectionEffect_FaceDetected, un-comment the two l
 
 Run the application, you should now see data showing up in the text box about the faces found in the analyzed frame.
 
+### Step 10: Identify the faces
 
+Next we want to take the faces we found and identify them.  Add the following method:
+
+```c#
+        public async Task<IList<IdentifyResult>> Identify(IList<DetectedFace> faces)
+        {
+            if (faces.Count == 0) return new List<IdentifyResult>();
+
+            IList<IdentifyResult> result = new List<IdentifyResult>();
+
+            TrainingStatus status = await _faceClient.PersonGroup.GetTrainingStatusAsync(_personGroupId);
+
+            if (status.Status != TrainingStatusType.Failed)
+            {
+                IList<Guid> faceIds = faces.Select(face => face.FaceId.GetValueOrDefault()).ToList();
+
+                result = await _faceClient.Face.IdentifyAsync(_personGroupId, faceIds, null);
+            }
+
+            return result;
+        }
+```
+
+Remember to call the method as follows ...
+
+```c#
+private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+            ...other code...
+	    
+                    // Do stuff here
+                    WriteableBitmap bmp = await GetWriteableBitmapFromPreviewFrame();
+                    var file = await SaveBitmapToStorage(bmp);
+		    var faces = await FindFaces(file);
+		    var identities = await Identify(faces);
+```
+
+Then at the bottom of the FaceDetectionEffect_FaceDetected, change the line of code that gets the json to work on "identities" instead of "faces" ...
+
+```c#
+		string json = JsonConvert.SerializeObject(identities, Formatting.Indented);
+```
+
+**Run the Application**
