@@ -133,6 +133,8 @@ We want to be able to detect faces locally.  This will allow us to call the cogn
 ```c#
 using Windows.Media.Core;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using Windows.UI.Core;
 ```
 
 - Add a new variable at the top of the code:
@@ -193,7 +195,7 @@ private FaceDetectionEffect _faceDetectionEffect;
         {
             Debug.WriteLine($"{args.ResultFrame.DetectedFaces.Count} faces detected");
 
-			if (args.ResultFrame.DetectedFaces.Count == 0) return;
+		if (args.ResultFrame.DetectedFaces.Count == 0) return;
 
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
@@ -217,7 +219,111 @@ private FaceDetectionEffect _faceDetectionEffect;
 
 > Also notice we use "-=" and "+=" to remove the event listener temporarily (until we are done), so that the event doesn't fire again until the frame has been analyzed,
 
+**Run the Application**
 
-	
+Run the application.  You should still get the same video preview, but if you watch the debug window, it should list how many faces are detected in the image.
+
+###Step 5: Capture Frame 
+
+The next step is to capture the frame as an image when a face is detected.  Add the following method...
+
+```c#
+private async Task<WriteableBitmap> GetWriteableBitmapFromPreviewFrame()
+        {
+            var previewProperties = _mediaCapture.VideoDeviceController.GetMediaStreamProperties(MediaStreamType.VideoPreview) as VideoEncodingProperties;
+
+            var videoFrame = new VideoFrame(BitmapPixelFormat.Bgra8, (int)previewProperties.Width, (int)previewProperties.Height);
+
+            var frame = await _mediaCapture.GetPreviewFrameAsync(videoFrame);
+
+            SoftwareBitmap frameBitmap = frame.SoftwareBitmap;
+
+            WriteableBitmap bitmap = new WriteableBitmap(frameBitmap.PixelWidth, frameBitmap.PixelHeight);
+
+            frameBitmap.CopyToBuffer(bitmap.PixelBuffer);
+
+            // Close the frame
+            frame.Dispose();
+            frame = null;
+
+            return bitmap;
+        }
+```
+
+This uses the _mediaCapture object to grab the current frame and stuff it into a writeable bitmap.
+
+Edit your FaceDetectionEffect_FaceDetected method, and call your new GetWriteableBitmapFromPreviewFrame method.
+
+```c#
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+			... other code ...
+			// Do stuff here
+			var bmp = await GetWriteableBitmapFromPreviewFrame();
+	}
+```
+
+###Step 6: Save image to Pictures Library
+
+Now we want to save the image to the pictures library.  
+
+- First we need to add a nuget package:
+
+1. Right-click on your project and select "Manage NuGet Packages"
+2. Select the "Browse" tab, and in the search box type: "WriteableBitmapEx"
+3. Select the package and install it.
+
+Now add the following method:
+
+```c#
+	private async Task<StorageFile> SaveBitmapToStorage(WriteableBitmap bitmap)
+        {
+            var myPictures = await StorageLibrary.GetLibraryAsync(Windows.Storage.KnownLibraryId.Pictures);
+            StorageFile file = await myPictures.SaveFolder.CreateFileAsync("_photo.jpg", CreationCollisionOption.ReplaceExisting);
+
+            using (var captureStream = new InMemoryRandomAccessStream())
+            {
+                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await bitmap.ToStreamAsJpeg(captureStream);
+
+                    var decoder = await BitmapDecoder.CreateAsync(captureStream);
+                    var encoder = await BitmapEncoder.CreateForTranscodingAsync(fileStream, decoder);
+
+                    var properties = new BitmapPropertySet {
+                            { "System.Photo.Orientation", new BitmapTypedValue(PhotoOrientation.Normal, PropertyType.UInt16) }
+                        };
+
+                    await encoder.BitmapProperties.SetPropertiesAsync(properties);
+
+                    await encoder.FlushAsync();
+                }
+            }
+
+            return file;
+        }
+```
+
+This method returns a StorageFile. 
+
+Edit your FaceDetectionEffect_FaceDetected method, and call your new method:
+
+```c#
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+			... other code ...
+			// Do stuff here
+			var bmp = await GetWriteableBitmapFromPreviewFrame();
+			var file =  = await SaveBitmapToStorage(bmp);		
+	}
+```
+
+**Run the application**
+
+Open you Pictures folder and run the application.  If you did everything correctly, you should see a new image named "_photo.jpg" show up every time a frame is captured that has a face.  
+
+###Step 7: Add Cognitive Services
+
+
 	
   
