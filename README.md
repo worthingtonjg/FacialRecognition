@@ -74,9 +74,7 @@ Edit the Package.appxmanifest and add the following capabilities:
 
 1. Microphone
 2. Pictures Library
-3. WebCam
-
-To use the web camera, we also have to enable the microphone.
+3. WebCam (To use the web camera, we also have to enable the microphone)
 
 ### Step 3: Setup the Video Preview
 
