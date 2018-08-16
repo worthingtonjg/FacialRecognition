@@ -146,7 +146,7 @@ We want to be able to detect faces locally.  This will allow us to call the cogn
 
 >[Analyzing Camera Frames Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/scene-analysis-for-media-capture)
 
-- Add a two new using statements:
+- Add the following using statements:
 
 ```c#
 using Windows.Media.Core;
