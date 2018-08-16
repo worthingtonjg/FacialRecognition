@@ -536,6 +536,11 @@ Then at the bottom of the FaceDetectionEffect_FaceDetected, un-comment the two l
 
 Run the application, you should now see data showing up in the text box about the faces found in the analyzed frame.
 
+**More Information**
+>-[Faces Quickstart](https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/csharp)
+>-[Detect and Frame Faces](https://docs.microsoft.com/en-us/azure/cognitive-services/face/tutorials/faceapiincsharptutorial)
+>-[Detect Faces in Images](https://docs.microsoft.com/en-us/azure/cognitive-services/face/face-api-how-to-topics/howtodetectfacesinimage)
+
 ### Step 10: Identify the faces
 
 Next we want to take the faces we found and identify them.  Add the following method:
@@ -768,3 +773,6 @@ When you run the application, this time you should get a textbox and button at t
 press the button, the _addPerson variable will be set to true.  And the next time a face is detected in the frame, it will try
 to add a new person to your person group using the name you specified.  The method call to train the person group could return
 before the training is finished, but it won't matter, after a few frames it should be able to identify a new person.
+
+**More Information**
+>-[Face API Documentation](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236)
