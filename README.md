@@ -24,7 +24,9 @@ To run the code you will need:
   - Visual Studio 2017
   - Windows 10 November Update (Build 10586)
   - An Azure subscription 
-  - A Face API Cognitive Service setup and running in Azure
+  - A Face API Cognitive Service setup and running in Azure 
+  
+  [Create a Cognitive Services APIs account in the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account)
 
 Steps to Run the code:
 
