@@ -69,7 +69,8 @@ Below is a step by step tutorial / explanation of the code, and how it works.
   - Minimum Version: Windows 10 November Update (10.0; Build 10586)
 
 ### Step 2: Add Capabilities
-- Edit the Package.appxmanifest and add the following capabilities:
+
+Edit the Package.appxmanifest and add the following capabilities:
 
 1. Microphone
 2. Pictures Library
@@ -78,7 +79,8 @@ Below is a step by step tutorial / explanation of the code, and how it works.
 To use the web camera, we also have to enable the microphone.
 
 ### Step 3: Setup the Video Preview
-- Open *MainPage.xaml* and paste in the following code snippet, in place of the empty <Grid></Grid>
+
+Open *MainPage.xaml* and paste in the following code snippet, in place of the empty <Grid></Grid>
 
 ```xaml
     <Grid>
@@ -91,26 +93,27 @@ To use the web camera, we also have to enable the microphone.
         <TextBox Grid.Column="1" x:Name="ResultText" TextWrapping="Wrap"></TextBox>
     </Grid>
 ```
-- Open *MainPage.xaml.cs*, and add an override for *OnNavigatedTo*, and make it async.  We need setup some async code when the app launches, and we can't do async in the constructor.
+Open *MainPage.xaml.cs*, and add an override for *OnNavigatedTo*, and make it async.  We need setup some async code when the app launches, and we can't do async in the constructor.
 
 ```c#
 	protected async override void OnNavigatedTo(NavigationEventArgs e)
 	{
 	}
 ```
-- At the top, add the following using statement:
+
+At the top, add the following using statement:
 
 ```c#
 using Windows.Media.Capture;
 ```
 
-- Then add the following private variable at the top of the MainPage class:
+Then add the following private variable at the top of the MainPage class:
 
 ```c#
 private MediaCapture _mediaCapture;
 ```
 
-- In the OnNavigatedTo method add the following code:
+In the OnNavigatedTo method add the following code:
 
 ```c#
 		_mediaCapture = new MediaCapture();
