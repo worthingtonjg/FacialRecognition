@@ -189,13 +189,13 @@ private FaceDetectionEffect _faceDetectionEffect;
         }
 ```
 
->  This method leverages the built in capabilities of Windows 10 to detect faces in images.
-> 	- **_faceDetectionEffect.DesiredDetectionInterval** - this is how frequently it will check for faces
-> 	- **_faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;** - This method gets called when a face is detected.
+This method leverages the built in capabilities of Windows 10 to detect faces in images.
 
+- **_faceDetectionEffect.DesiredDetectionInterval** - this is how frequently it will check for faces
 
+- **_faceDetectionEffect.FaceDetected += FaceDetectionEffect_FaceDetected;** - This method gets called when a face is detected.
 
-- Then make sure you call *CreateFaceDetectionEffectAsync* at the bottom of your OnNavigatedTo method:
+Now make sure you call *CreateFaceDetectionEffectAsync* at the bottom of your OnNavigatedTo method:
 
 ```c#
 	protected async override void OnNavigatedTo(NavigationEventArgs e)
