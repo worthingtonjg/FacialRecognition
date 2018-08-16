@@ -80,7 +80,7 @@ Edit the Package.appxmanifest and add the following capabilities:
 
 Open *MainPage.xaml* and paste in the following code snippet, in place of the empty grid.  
 
-This places splits the screen into two columns and adds two controls.
+This splits the screen into two columns and adds two controls.
 
 The *CaptureElement* is the control that allows us to preview the web cam feed.  And the TextBox will be used to view the data we collect about the image when it is analyzed for faces.
 
