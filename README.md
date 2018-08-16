@@ -296,7 +296,7 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new GetWriteabl
 
 Now we want to save the image to the pictures library.  
 
-- First we need to add a nuget package:
+First we need to add a nuget package:
 
 1. Right-click on your project and select "Manage NuGet Packages"
 2. Select the "Browse" tab, and in the search box type: "WriteableBitmapEx"
