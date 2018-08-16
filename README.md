@@ -15,7 +15,7 @@ Topics discussed include:
 
 *Please note, this was written to demonstrate how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, just barfing everything in the code behind, etc.*
 
-*If this was a production application you code would likely be more complex and involved.*
+*If this was a production application your code would likely be more complex and involved.*
 
 ## How to Run the Code
 
