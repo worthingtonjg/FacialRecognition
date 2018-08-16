@@ -25,7 +25,9 @@ To run the code you will need:
   - Windows 10 November Update (Build 10586)
   - An Azure subscription 
   - A Face API Cognitive Service setup and running in Azure
-  
+
+Steps to Run the code:
+
 1. Clone the repo
 2. Open CogApp2.sln
 3. Edit MainPage.xaml.cs
