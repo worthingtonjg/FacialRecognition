@@ -144,6 +144,8 @@ You should get prompted for permission to use the microphone and web camera.  If
 
 We want to be able to detect faces locally.  This will allow us to call the cognitive services less frequently (only when faces are in the frame).  To do this we can use the built in face detection capability of Windows 10 by adding a Face Detection Effect.  
 
+>[Analyzing Camera Frames Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/scene-analysis-for-media-capture)
+
 - Add a two new using statements:
 
 ```c#
