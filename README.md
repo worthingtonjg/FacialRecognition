@@ -1,10 +1,21 @@
 # Facial Recognition
 
-This code demonstrates how to use the Microsoft Cognitive Service Face API.  Please note, this was written to demonstrate
-how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, 
-just barfing everything in the code behind, etc.  
+This code demonstrates how to use the Microsoft Cognitive Service Face API.  
 
-If this was a production application you code would likely be more complex and involved.
+Topics discussed include:
+
+- **CaptureElement** - allows you to preview a feed from a camera.
+- **MediaCapture** - allows you to connect to a web cam camera and take video / images.
+- **Local Face Detection** - Detect faces locally, so we don't need to call the cognitive service as much.
+- **Capture Frames** - How to capture frames from the video preview 
+- **Save Frames to Pictures Folder** - How to save captured frames to the Pictures Folder
+- **Find Faces with Cognitive Service** - Analyze images for faces, identifying facial attributes
+- **Identify Faces with Cognitive Services** - Analyzes faces found and matche them to people in your person group
+- **Train Person Group with new Faces** - Add new faces / identities to your person group, and retrain.
+
+*Please note, this was written to demonstrate how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, just barfing everything in the code behind, etc.  
+
+*If this was a production application you code would likely be more complex and involved.
 
 ## How to Run the Code
 
@@ -46,16 +57,7 @@ If this is your first time to run it, it won't have any faces defined in the fac
 
 ## Tutorial
 
-Below is a step by step tutorial / explanation of the code, and how it works.  Topics discussed include:
-
-- **CaptureElement** - allows you to preview a feed from a camera.
-- **MediaCapture** - allows you to connect to a web cam camera and take video / images.
-- **Local Face Detection** - Detect faces locally, so we don't need to call the cognitive service as much.
-- **Capture Frames** - How to capture frames from the video preview 
-- **Save Frames to Pictures Folder** - How to save captured frames to the Pictures Folder
-- **Find Faces with Cognitive Service** - Analyze images for faces, identifying facial attributes
-- **Identify Faces with Cognitive Services** - Analyzes faces found and matche them to people in your person group
-- **Train Person Group with new Faces** - Add new faces / identities to your person group, and retrain.
+Below is a step by step tutorial / explanation of the code, and how it works.  
 
 ### Step 1: Create new UWP Application
 - Open Visual Studio 2017, and choose File => New Project
