@@ -233,9 +233,9 @@ Now make sure you call *CreateFaceDetectionEffectAsync* at the bottom of your On
             });
         }
 ```
-> This code executes on a seperate thread.  So we need to use the Dispatcher to marshall our code to run on the UI thread, otherwise we will get errors.
+This code executes on a seperate thread.  So we need to use the Dispatcher to marshall our code to run on the UI thread, otherwise we will get errors.
 
-> Also notice we use "-=" and "+=" to remove the event listener temporarily (until we are done), so that the event doesn't fire again until the frame has been analyzed,
+Also notice we use "-=" and "+=" to remove the event listener temporarily (until we are done), so that the event doesn't fire again until the frame has been analyzed,
 
 **Run the Application**
 
