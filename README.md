@@ -4,14 +4,14 @@ This code demonstrates how to use the Microsoft Cognitive Service Face API.
 
 Topics discussed include:
 
-- **CaptureElement** - allows you to preview a feed from a web cam.
-- **MediaCapture** - allows you to connect to a web cam and take video / images.
-- **Local Face Detection** - Detect faces locally, so we don't need to call the cognitive service as much.
-- **Capture Frames** - How to capture frames from the video preview 
+- **CaptureElement** - how  to preview a feed from a web cam.
+- **MediaCapture** - how to connect to a web cam and take video / images.
+- **Local Face Detection** - how to detects faces locally, so you don't need to call the cognitive service as much.
+- **Capture Frames** - How to capture frames from the video preview.
 - **Save Frames to Pictures Folder** - How to save captured frames to the Pictures Folder
-- **Find Faces with Cognitive Service** - Analyze images for faces, identifying facial attributes
-- **Identify Faces with Cognitive Services** - Analyzes faces found and matche them to people in your person group
-- **Train Person Group with new Faces** - Add new faces / identities to your person group, and retrain.
+- **Find Faces with Cognitive Service** - How to analyze images for faces and identify facial attributes, such as emotion.
+- **Identify Faces with Cognitive Services** - How to analyzes faces found and match them to people in your person group.
+- **Train Person Group with new Faces** - How to create a person group and add new faces / identities.
 
 *Please note, this was written to demonstrate how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, just barfing everything in the code behind, etc.  
 
