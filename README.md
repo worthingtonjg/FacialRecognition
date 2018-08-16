@@ -138,13 +138,14 @@ You should get prompted for permission to use the microphone and web camera.  If
 
 > **Note:** On my Surface Book 2 the *MediaCapture* class defaults to the front facing camera.  It is possible you have a different camera setup, so you may need to look into the documentation for more information about setting which camera to use.
 >
+
+**More Information**
+
 >[View UWP Camera Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/camera)
 
 ### Step 4: Add local face detection
 
 We want to be able to detect faces locally.  This will allow us to call the cognitive services less frequently (only when faces are in the frame).  To do this we can use the built in face detection capability of Windows 10 by adding a Face Detection Effect.  
-
->[Analyzing Camera Frames Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/scene-analysis-for-media-capture)
 
 - Add the following using statements:
 
@@ -241,6 +242,10 @@ Also notice we use "-=" and "+=" to remove the event listener temporarily (until
 
 Run the application.  You should still get the same video preview, but if you watch the debug window, it should list how many faces are detected in the image.
 
+**More Information**
+
+>[Analyzing Camera Frames Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/scene-analysis-for-media-capture)
+
 ### Step 5: Capture Frame 
 
 The next step is to capture the frame as an image when a face is detected.  
@@ -291,6 +296,11 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new GetWriteabl
 			var bmp = await GetWriteableBitmapFromPreviewFrame();
 	}
 ```
+
+**More Information**
+
+>- [Basics of MediaCapture](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/basic-photo-video-and-audio-capture-with-mediacapture)
+>- [Preview Frame](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/get-a-preview-frame)
 
 ### Step 6: Save image to Pictures Library
 
@@ -359,11 +369,18 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new method:
 
 Open you Pictures folder and run the application.  If you did everything correctly, you should see a new image named "_photo.jpg" show up every time a frame is captured that has a face.  
 
+**More Information**
+> - [WriteableBitmapEx](https://github.com/teichgraf/WriteableBitmapEx)
+> - [Windows Storage Folders](https://docs.microsoft.com/en-us/uwp/api/windows.storage.knownfolders)
+> - [Save WriteableBitmap to Storage](https://code.msdn.microsoft.com/windowsapps/How-to-save-WriteableBitmap-bd23d455)
+
 ### Step 7: Add Cognitive Services
 
 To continue, you will need to make sure you already have an Azure account setup.  You will also need to have already created a Face Cognitive Service in your account.  
 
-I am not going to go into details here about how to do that.  It is actually really easy to do in Azure.
+I am not going to go into details here about how to do that.  It is actually really easy to do in Azure, below is a link that can help you do that.
+
+> [How to create a Cognitive Services APIs account in the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account)
 
 Once your cognitive service is setup, we need to pull in the correct nuget package:
 
