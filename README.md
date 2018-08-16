@@ -78,7 +78,7 @@ Edit the Package.appxmanifest and add the following capabilities:
 
 ### Step 3: Setup the Video Preview
 
-Open *MainPage.xaml* and paste in the following code snippet, in place of the empty <Grid></Grid>
+Open *MainPage.xaml* and paste in the following code snippet, in place of the empty grid.
 
 ```xaml
     <Grid>
