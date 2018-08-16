@@ -257,7 +257,7 @@ using Windows.Media.MediaProperties;
 Then add the following method...
 
 ```c#
-private async Task<WriteableBitmap> GetWriteableBitmapFromPreviewFrame()
+	private async Task<WriteableBitmap> GetWriteableBitmapFromPreviewFrame()
         {
             var previewProperties = _mediaCapture.VideoDeviceController.GetMediaStreamProperties(MediaStreamType.VideoPreview) as VideoEncodingProperties;
 
