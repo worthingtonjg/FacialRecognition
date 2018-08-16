@@ -1,6 +1,10 @@
 # Facial Recognition
 
-This code demonstrates how to use the Microsoft Cognitive Service Face API.  
+This code demonstrates how to use the Microsoft Cognitive Service Face API.  Please note, this was written to demonstrate
+how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, 
+just barfing everything in the code behind, etc.  
+
+If this was a production application you code would likely be more complex and involved.
 
 ## How to Run the Code
 
@@ -528,7 +532,7 @@ Next we want to take the faces we found and identify them.  Add the following me
 Remember to call the method as follows ...
 
 ```c#
-private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
         {
             ...other code...
 	    
@@ -546,3 +550,190 @@ Then at the bottom of the FaceDetectionEffect_FaceDetected, change the line of c
 ```
 
 **Run the Application**
+
+This is where your person group that is part of your cognitive service comes in.  If you already have people in your person group, then it will be able to identify them, and you could get data if whoever the camera is pointing at is in your group.  But if your person group is new then you should get an empty array coming back at this point.  Don't worry, we will add some faces in a minute.
+
+### Step 11: Extract top candidates and combine all the collected data
+
+In this step we are going to create a final object that holds all the data we've collected so far.
+
+Add a new class to your project ...
+
+```c#
+	public class Identification
+	{
+		public Person Person { get; set; }
+		public IdentifyResult IdentifyResult { get; set; }
+		public Face Face { get; set; }
+
+		public double Confidence;
+	}	
+```    
+
+Now add this method ...
+
+```c#
+	public async Task<List<Identification>> ExtractTopCandidate(IList<IdentifyResult> identities, IList<DetectedFace> faces)
+        {
+            var result = new List<Identification>();
+
+            foreach (var face in faces)
+            {
+                var identifyResult = identities.Where(i => i.FaceId == face.FaceId).FirstOrDefault();
+
+                var identification = new Identification
+                {
+                    Person = new Person { Name = "Unknown" },
+                    Confidence = 1,
+                    Face = face,
+                    IdentifyResult = identifyResult
+                };
+
+                result.Add(identification);
+
+                if(identifyResult != null && identifyResult.Candidates.Count > 0)
+                {
+                
+                    // Get top 1 among all candidates returned
+                    IdentifyCandidate candidate = identifyResult.Candidates[0];
+                   
+                    var person = await _faceClient.PersonGroupPerson.GetAsync(_personGroupId, candidate.PersonId);
+
+                    identification.Person = person;
+                    identification.Confidence = candidate.Confidence;
+                }
+            }
+
+            return result;
+        }
+```
+
+This method does a couple things...
+
+1.  So far we have data on faces and identities, this combines that data into the Identification class that we created.
+2.  If the person could not be identified, then his identity comes back as unknown, but we still get data on his face.
+3.  In this example, I chose to only care about the first candidate that came back for the identity.  
+
+Make sure to call your method ...
+
+```c#
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+            ...other code...
+	    
+                    // Do stuff here
+                    WriteableBitmap bmp = await GetWriteableBitmapFromPreviewFrame();
+                    var file = await SaveBitmapToStorage(bmp);
+		    var faces = await FindFaces(file);
+		    var identities = await Identify(faces);
+		    var candidates = await ExtractTopCandidate(identities, faces);
+```
+
+Also change the line of code that gets the json to use the candidates now ...
+
+```c#
+	string json = JsonConvert.SerializeObject(candidates, Formatting.Indented);
+```
+
+**Run the application**
+
+You should get information about the faces coming back now, if you do not have a face group, or if it cannot identify the face in 
+the image then the identity should come back as unknown.
+
+### Step 12: Add people to your person group
+
+In this step we are going to add people into your person group.  The way I am doing it is a bit strange, but mainly it is because
+I don't want to re-write a bunch of code to accomodate this feature.  If this app was real you would do this differently.
+
+Change your MainPage.xaml where it defines the grid to look like the code below.  Basically we are adding a textbox and button...
+
+```xaml
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <CaptureElement Grid.Column="0" x:Name="PreviewElement"></CaptureElement>
+        <TextBox Grid.Column="1" x:Name="ResultText" TextWrapping="Wrap"></TextBox>
+
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="PersonName" Margin="3"></TextBox>
+            <Button x:Name="AddPersonButton" Click="AddPersonButton_Click" Grid.Column="1" Margin="3">Add Person</Button>
+        </Grid>
+    </Grid>
+```
+Define this variable at the top of you MainPage.xaml.cs ...
+
+```c#
+bool _addPerson;
+```
+
+Add code to handle the button click ...
+
+```c#
+        private void AddPersonButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(PersonName.Text != null)
+            {
+                _addPerson = true;
+            }
+        }
+```
+
+When the _addPerson variable is true the method below will take the image we've taken add it to your person group, with 
+the specified person name.  It will also retrain the group.
+
+```c#
+	private async Task AddPerson(StorageFile file)
+        {
+            if (!_addPerson) return;
+
+            try
+            {
+                using (var s = await file.OpenStreamForReadAsync())
+                {
+                    Person newPerson = await _faceClient.PersonGroupPerson.CreateAsync(_personGroupId, PersonName.Text);
+                    await _faceClient.PersonGroupPerson.AddPersonFaceFromStreamAsync(_personGroupId, newPerson.PersonId, s);
+                    await _faceClient.PersonGroup.TrainAsync(_personGroupId);
+                }
+
+            }
+            finally
+            {
+                PersonName.Text = "";
+                _addPerson = false;
+            }
+        }
+```
+
+Call the new method as follows
+
+```c#
+	private async void FaceDetectionEffect_FaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
+        {
+		... other code ...
+
+		// Do stuff here
+		WriteableBitmap bmp = await GetWriteableBitmapFromPreviewFrame();
+                var file = await SaveBitmapToStorage(bmp);
+		await AddPerson(file);
+		
+		... other coede ...
+```
+
+**Run the application**
+
+When you run the application, this time you should get a textbox and button at the bottom of the UI.  If you enter a name, and 
+press the button, the _addPerson variable will be set to true.  And the next time a face is detected in the frame, it will try
+to add a new person to your person group using the name you specified.  The method call to train the person group could return
+before the training is finished, but it won't matter, after a few frames it should be able to identify a new person.
