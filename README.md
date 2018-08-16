@@ -4,8 +4,8 @@ This code demonstrates how to use the Microsoft Cognitive Service Face API.
 
 Topics discussed include:
 
-- **CaptureElement** - allows you to preview a feed from a camera.
-- **MediaCapture** - allows you to connect to a web cam camera and take video / images.
+- **CaptureElement** - allows you to preview a feed from a web cam.
+- **MediaCapture** - allows you to connect to a web cam and take video / images.
 - **Local Face Detection** - Detect faces locally, so we don't need to call the cognitive service as much.
 - **Capture Frames** - How to capture frames from the video preview 
 - **Save Frames to Pictures Folder** - How to save captured frames to the Pictures Folder
