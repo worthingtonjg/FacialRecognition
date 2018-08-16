@@ -26,7 +26,7 @@ To run the code you will need:
   - An Azure subscription 
   - A Face API Cognitive Service setup and running in Azure 
   
-  [Create a Cognitive Services APIs account in the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account)
+  > [How to create a Cognitive Services APIs account in the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account)
 
 Steps to Run the code:
 
