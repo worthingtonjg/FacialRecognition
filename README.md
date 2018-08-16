@@ -548,8 +548,11 @@ Run the application, you should now see data showing up in the text box about th
 
 >
 > [Faces Quickstart](https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/csharp)
+
 > [Detect and Frame Faces](https://docs.microsoft.com/en-us/azure/cognitive-services/face/tutorials/faceapiincsharptutorial)
+
 > [Detect Faces in Images](https://docs.microsoft.com/en-us/azure/cognitive-services/face/face-api-how-to-topics/howtodetectfacesinimage)
+
 >
 
 ### Step 10: Identify the faces
@@ -607,11 +610,13 @@ In this step we are going to create a final object that holds all the data we've
 Add a new class to your project ...
 
 ```c#
+ 	using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+	
 	public class Identification
 	{
 		public Person Person { get; set; }
 		public IdentifyResult IdentifyResult { get; set; }
-		public Face Face { get; set; }
+		public DetectedFace Face { get; set; }
 
 		public double Confidence;
 	}	
