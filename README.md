@@ -13,9 +13,9 @@ Topics discussed include:
 - **Identify Faces with Cognitive Services** - How to analyzes faces found and match them to people in your person group.
 - **Train Person Group with new Faces** - How to create a person group and add new faces / identities.
 
-*Please note, this was written to demonstrate how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, just barfing everything in the code behind, etc.  
+*Please note, this was written to demonstrate how to use Azure Cognitive services.  I am not following very many (if any) good coding practices, catching very few errors, just barfing everything in the code behind, etc.*
 
-*If this was a production application you code would likely be more complex and involved.
+*If this was a production application you code would likely be more complex and involved.*
 
 ## How to Run the Code
 
