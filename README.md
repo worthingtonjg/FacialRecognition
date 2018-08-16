@@ -141,7 +141,9 @@ You should get prompted for permission to use the microphone and web camera.  If
 
 **More Information**
 
->[View UWP Camera Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/camera)
+>
+> [View UWP Camera Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/camera)
+>
 
 ### Step 4: Add local face detection
 
@@ -244,7 +246,9 @@ Run the application.  You should still get the same video preview, but if you wa
 
 **More Information**
 
->[Analyzing Camera Frames Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/scene-analysis-for-media-capture)
+>
+> [Analyzing Camera Frames Documentation](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/scene-analysis-for-media-capture)
+>
 
 ### Step 5: Capture Frame 
 
@@ -299,8 +303,10 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new GetWriteabl
 
 **More Information**
 
->- [Basics of MediaCapture](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/basic-photo-video-and-audio-capture-with-mediacapture)
->- [Preview Frame](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/get-a-preview-frame)
+>
+> [Basics of MediaCapture](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/basic-photo-video-and-audio-capture-with-mediacapture)
+> [Preview Frame](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/get-a-preview-frame)
+>
 
 ### Step 6: Save image to Pictures Library
 
@@ -370,9 +376,11 @@ Edit your FaceDetectionEffect_FaceDetected method, and call your new method:
 Open you Pictures folder and run the application.  If you did everything correctly, you should see a new image named "_photo.jpg" show up every time a frame is captured that has a face.  
 
 **More Information**
-> - [WriteableBitmapEx](https://github.com/teichgraf/WriteableBitmapEx)
-> - [Windows Storage Folders](https://docs.microsoft.com/en-us/uwp/api/windows.storage.knownfolders)
-> - [Save WriteableBitmap to Storage](https://code.msdn.microsoft.com/windowsapps/How-to-save-WriteableBitmap-bd23d455)
+>
+> [WriteableBitmapEx](https://github.com/teichgraf/WriteableBitmapEx)
+> [Windows Storage Folders](https://docs.microsoft.com/en-us/uwp/api/windows.storage.knownfolders)
+> [Save WriteableBitmap to Storage](https://code.msdn.microsoft.com/windowsapps/How-to-save-WriteableBitmap-bd23d455)
+>
 
 ### Step 7: Add Cognitive Services
 
@@ -537,9 +545,12 @@ Then at the bottom of the FaceDetectionEffect_FaceDetected, un-comment the two l
 Run the application, you should now see data showing up in the text box about the faces found in the analyzed frame.
 
 **More Information**
->-[Faces Quickstart](https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/csharp)
->-[Detect and Frame Faces](https://docs.microsoft.com/en-us/azure/cognitive-services/face/tutorials/faceapiincsharptutorial)
->-[Detect Faces in Images](https://docs.microsoft.com/en-us/azure/cognitive-services/face/face-api-how-to-topics/howtodetectfacesinimage)
+
+>
+> [Faces Quickstart](https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/csharp)
+> [Detect and Frame Faces](https://docs.microsoft.com/en-us/azure/cognitive-services/face/tutorials/faceapiincsharptutorial)
+> [Detect Faces in Images](https://docs.microsoft.com/en-us/azure/cognitive-services/face/face-api-how-to-topics/howtodetectfacesinimage)
+>
 
 ### Step 10: Identify the faces
 
@@ -775,4 +786,7 @@ to add a new person to your person group using the name you specified.  The meth
 before the training is finished, but it won't matter, after a few frames it should be able to identify a new person.
 
 **More Information**
->-[Face API Documentation](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236)
+
+>
+> [Face API Documentation](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236)
+>
