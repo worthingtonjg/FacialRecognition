@@ -75,6 +75,7 @@ namespace CogApp2
                 if (ex.Body.Error.Code == "PersonGroupNotFound")
                 {
                     await _faceClient.PersonGroup.CreateAsync(_personGroupId, _personGroupId);
+                    await _faceClient.PersonGroup.TrainAsync(_personGroupId);
                 }
                 else
                 {
@@ -213,13 +214,20 @@ namespace CogApp2
 
             IList<IdentifyResult> result = new List<IdentifyResult>();
 
-            TrainingStatus status = await _faceClient.PersonGroup.GetTrainingStatusAsync(_personGroupId);
-
-            if (status.Status != TrainingStatusType.Failed)
+            try
             {
-                IList<Guid> faceIds = faces.Select(face => face.FaceId.GetValueOrDefault()).ToList();
+                TrainingStatus status = await _faceClient.PersonGroup.GetTrainingStatusAsync(_personGroupId);
 
-                result = await _faceClient.Face.IdentifyAsync(_personGroupId, faceIds, null);
+                if (status.Status != TrainingStatusType.Failed)
+                {
+                    IList<Guid> faceIds = faces.Select(face => face.FaceId.GetValueOrDefault()).ToList();
+
+                    result = await _faceClient.Face.IdentifyAsync(_personGroupId, faceIds, null);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
 
             return result;
