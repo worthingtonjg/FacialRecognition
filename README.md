@@ -460,6 +460,7 @@ Add the following code that will initialize your face group if it does not exist
                 if (ex.Body.Error.Code == "PersonGroupNotFound")
                 {
                     await _faceClient.PersonGroup.CreateAsync(_personGroupId, _personGroupId);
+		    await _faceClient.PersonGroup.TrainAsync(_personGroupId);
                 }
                 else
                 {
@@ -560,23 +561,30 @@ Run the application, you should now see data showing up in the text box about th
 Next we want to take the faces we found and identify them.  Add the following method:
 
 ```c#
-        public async Task<IList<IdentifyResult>> Identify(IList<DetectedFace> faces)
-        {
-            if (faces.Count == 0) return new List<IdentifyResult>();
+	public async Task<IList<IdentifyResult>> Identify(IList<DetectedFace> faces)
+	{
+		if (faces.Count == 0) return new List<IdentifyResult>();
 
-            IList<IdentifyResult> result = new List<IdentifyResult>();
+		IList<IdentifyResult> result = new List<IdentifyResult>();
+	
+		try
+		{
+			TrainingStatus status = await _faceClient.PersonGroup.GetTrainingStatusAsync(_personGroupId);
 
-            TrainingStatus status = await _faceClient.PersonGroup.GetTrainingStatusAsync(_personGroupId);
+			if (status.Status != TrainingStatusType.Failed)
+			{
+				IList<Guid> faceIds = faces.Select(face => face.FaceId.GetValueOrDefault()).ToList();
 
-            if (status.Status != TrainingStatusType.Failed)
-            {
-                IList<Guid> faceIds = faces.Select(face => face.FaceId.GetValueOrDefault()).ToList();
+				result = await _faceClient.Face.IdentifyAsync(_personGroupId, faceIds, null);
+			}
+		}
+		catch(Exception ex)
+		{
+			Debug.WriteLine(ex.Message);
+		}
 
-                result = await _faceClient.Face.IdentifyAsync(_personGroupId, faceIds, null);
-            }
-
-            return result;
-        }
+		return result;
+	}
 ```
 
 Remember to call the method as follows ...
