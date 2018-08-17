@@ -1,4 +1,4 @@
-# Facial Recognition - Microsoft Cogntive Service Face API Demo
+# Facial Recognition
 
 This code demonstrates how to use the Microsoft Cognitive Service Face API.  
 
